@@ -1,5 +1,5 @@
 module Ebay
-  class Inventory < Resource
+  class InventoryItem < Resource
     include Ebay::ResourceActions.new uri: 'sell/inventory/v1/inventory_item/%s'
 
     def self.all(params)
@@ -8,8 +8,12 @@ module Ebay
       get path.build, params
     end
 
-    def self.create_or_update(resource_id, params = {})
+    def self.create_or_replace(resource_id, params = {})
       put path.build(resource_id), params
+    end
+
+    def self.bulk_create_or_replace(params = {})
+      post 'sell/inventory/v1/bulk_create_or_replace_inventory_item', params
     end
   end
 end
