@@ -27,21 +27,23 @@ module Ebay
     end
 
     def refresh_token
-      c = Faraday.new(url: config.api_url) do |conn|
-        conn.request :json
-        conn.headers = HEADERS
+      config = Ebay::Config.new(
+        token: @params[:token]
+      )
+      faraday = Faraday.new(url: config.api_url) do |conn|
+        base64_auth = Base64.strict_encode64("#{ENV['EBAY_APP_ID']}:#{ENV['EBAY_APP_SECRET']}")
+        conn.request :url_encoded
+        conn.headers = HEADERS.merge(
+          'content-type' => 'application/x-www-form-urlencoded',
+          'Authorization' => "Basic #{base64_auth}",
+        )
         conn.use Ebay::Middleware::HttpException
         conn.adapter Faraday.default_adapter
       end
-      response = c.run_request(
+      response = faraday.run_request(
         :post,
-        'oauth/access',
-        {
-          grant_type: 'refresh_token',
-          client_id: @params[:app_id],
-          client_secret: @params[:app_secret],
-          refresh_token: @params[:refresh_token]
-        },
+        'identity/v1/oauth2/token',
+        "grant_type=refresh_token&refresh_token=#{@params[:refresh_token]}&scope=#{@params[:scopes]}",
         {}
       )
       parsed = JSON.parse(response.body).deep_symbolize_keys
