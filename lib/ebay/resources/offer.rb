@@ -12,12 +12,16 @@ module Ebay
       post "#{path.build(resource_id)}/publish", params
     end
 
-    def self.bulk_create_or_replace(params = {})
+    def self.bulk_create(params = {})
       post 'sell/inventory/v1/bulk_create_offer', params
     end
 
     def self.publish_by_inventory_item_group(params = {})
       post 'sell/inventory/v1/offer/publish_by_inventory_item_group', params
+    end
+
+    def self.withdraw_by_inventory_item_group(params = {})
+      post 'sell/inventory/v1/offer/withdraw_by_inventory_item_group', params
     end
   end
 end
