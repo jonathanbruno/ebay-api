@@ -15,5 +15,9 @@ module Ebay
     def self.bulk_create_or_replace(params = {})
       post 'sell/inventory/v1/bulk_create_or_replace_inventory_item', params
     end
+
+    def self.bulk_update_price_quantity(params = {})
+      post 'sell/inventory/v1/bulk_update_price_quantity', params
+    end
   end
 end
