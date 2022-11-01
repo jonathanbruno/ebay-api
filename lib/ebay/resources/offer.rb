@@ -12,6 +12,10 @@ module Ebay
       post "#{path.build(resource_id)}/publish", params
     end
 
+    def self.withdraw(resource_id, params = {})
+      post "#{path.build(resource_id)}/withdraw", params
+    end
+
     def self.bulk_create(params = {})
       post 'sell/inventory/v1/bulk_create_offer', params
     end
