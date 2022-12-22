@@ -5,7 +5,7 @@ module Ebay
     }.freeze
 
     def api_url
-      DEFAULTS[:base_url]
+      custom_api_url || DEFAULTS[:base_url]
     end
   end
 end

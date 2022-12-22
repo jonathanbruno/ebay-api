@@ -12,9 +12,7 @@ module Ebay
     end
 
     def build_connection
-      config = Ebay::Config.new(
-        token: @params[:token]
-      )
+      config = build_config
       ssl_options = config.ssl || {}
       Faraday.new(url: config.api_url, ssl: ssl_options) do |conn|
         conn.request :json
@@ -27,9 +25,7 @@ module Ebay
     end
 
     def refresh_token
-      config = Ebay::Config.new(
-        token: @params[:token]
-      )
+      config = build_config
       faraday = Faraday.new(url: config.api_url) do |conn|
         base64_auth = Base64.strict_encode64("#{ENV['EBAY_APP_ID']}:#{ENV['EBAY_APP_SECRET']}")
         conn.request :url_encoded
@@ -50,6 +46,16 @@ module Ebay
       @params[:token] = parsed[:access_token]
       @params[:refresh_token] = parsed[:refresh_token]
       parsed
+    end
+
+    def build_config
+      Ebay::Config.new(token: @params[:token]).tap do |config|
+        if @params[:sandbox]
+          config.custom_api_url = 'https://api.sandbox.ebay.com'
+        else
+          config.custom_api_url = 'https://api.ebay.com'
+        end
+      end
     end
   end
 end
