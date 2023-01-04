@@ -7,5 +7,9 @@ module Ebay
       params[:offset] ||= 0
       get path.build, params
     end
+
+    def self.create(merchant_location_key, params = {})
+      post path.build(merchant_location_key), params
+    end
   end
 end

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ebay-api (1.0.3)
+    ebay-api (1.0.4)
       faraday (~> 1.0)
       faraday_middleware (~> 1.0)
       hashie (~> 3.4)
