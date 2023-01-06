@@ -50,11 +50,13 @@ module Ebay
 
     def build_config
       Ebay::Config.new(token: @params[:token]).tap do |config|
-        if @params[:sandbox]
-          config.custom_api_url = 'https://api.sandbox.ebay.com'
-        else
-          config.custom_api_url = 'https://api.ebay.com'
-        end
+        prefix = @params[:apiz] ? 'apiz' : 'api'
+        config.custom_api_url =
+          if @params[:sandbox]
+            "https://#{prefix}.sandbox.ebay.com"
+          else
+            "https://#{prefix}.ebay.com"
+          end
       end
     end
   end
